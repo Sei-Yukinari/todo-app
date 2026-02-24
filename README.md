@@ -9,7 +9,7 @@
 
 | 機能 | 説明 |
 |------|------|
-| 🔐 ユーザー認証 | メールアドレスとパスワードで登録・ログイン |
+| 🔐 ユーザー認証 | Firebase Authentication (Google, GitHub) — HTTPOnly セッションCookieで管理 |
 | ✅ タスク管理 | タスクの作成・編集・削除・ステータス変更 |
 | 🏷️ タグ・優先度 | タグや優先度（高/中/低）でタスクを整理 |
 | 📅 期限管理 | 期限を設定し、期限切れタスクをハイライト表示 |
@@ -26,7 +26,7 @@
 | フロントエンド | [Next.js 16+](https://nextjs.org/) (App Router), TypeScript, Tailwind CSS |
 | 状態管理    | [TanStack Query](https://tanstack.com/query) (React Query)                |
 | バックエンド  | Node.js + Express                                                         |
-| 認証      | JWT + bcrypt（HTTPOnly Cookieで管理）                                          |
+| 認証      | Firebase Authentication (Google, GitHub) — HTTPOnly セッションCookieで管理 |
 | ORM     | [Prisma](https://www.prisma.io/)                                          |
 | データベース  | PostgreSQL                                                                |
 | バリデーション | [Zod](https://zod.dev/)                                                   |
@@ -40,7 +40,7 @@
 
 ### 必要な環境
 
-- Node.js 18+
+- Node.js 22+
 - PostgreSQL
 
 ---
