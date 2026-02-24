@@ -27,8 +27,15 @@ export async function POST(request: NextRequest) {
         if (text) json = { error: { message: text } };
       }
       // Log backend error for debugging (do not log tokens)
-      console.error('[BFF] backend /api/auth/session error', res.status, json?.error?.message || json?.message || 'no-message');
-      return NextResponse.json({ error: { message: json?.error?.message || json?.message || 'Failed to create session' } }, { status: res.status });
+      console.error(
+        '[BFF] backend /api/auth/session error',
+        res.status,
+        json?.error?.message || json?.message || 'no-message'
+      );
+      return NextResponse.json(
+        { error: { message: json?.error?.message || json?.message || 'Failed to create session' } },
+        { status: res.status }
+      );
     }
 
     // Propagate Set-Cookie header from backend
