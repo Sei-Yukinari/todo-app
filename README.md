@@ -76,3 +76,5 @@
 - 他ユーザーへのタスク共有
 - カレンダー表示
 - モバイルアプリ対応
+
+PR note: Created via Copilot CLI.
