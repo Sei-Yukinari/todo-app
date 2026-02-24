@@ -37,6 +37,7 @@ npm install
 `.env` ファイルを作成し、データベース接続情報などを記載してください。
 
 例:
+
 ```
 DATABASE_URL="file:./dev.db"
 ```
@@ -48,6 +49,7 @@ npm run dev
 ```
 
 または本番環境用:
+
 ```bash
 npm run build
 npm start
@@ -56,5 +58,6 @@ npm start
 ---
 
 ## 参考リンク
+
 - [Prisma 公式ドキュメント](https://www.prisma.io/docs/)
 - [Node.js 公式サイト](https://nodejs.org/ja/)

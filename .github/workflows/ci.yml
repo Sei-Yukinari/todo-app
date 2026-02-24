@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  lint:
+    name: Lint (front/api)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        workdir: [front, api]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.workdir }}
+          npm ci
+
+      - name: Run ESLint
+        run: |
+          cd ${{ matrix.workdir }}
+          npm run lint
