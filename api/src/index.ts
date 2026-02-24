@@ -16,11 +16,15 @@ app.use('/api/auth', authRoutes);
 app.use((err: any, _req: Request, res: Response, _next: any) => {
   console.error('[GLOBAL_ERROR_HANDLER]', err && err.stack ? err.stack : err);
   try {
-    res.status(err?.status || 500).json({ error: { message: err?.message || 'Internal Server Error' } });
+    res
+      .status(err?.status || 500)
+      .json({ error: { message: err?.message || 'Internal Server Error' } });
   } catch (e) {
     // In case response streaming failed, just log and end
     console.error('[GLOBAL_ERROR_HANDLER|RESP_FAIL]', e);
-    try { res.end(); } catch {};
+    try {
+      res.end();
+    } catch {}
   }
 });
 
@@ -49,4 +53,3 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason) => {
   console.error('[UNHANDLED_REJECTION]', reason);
 });
-

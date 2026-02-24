@@ -35,7 +35,11 @@ export const meController = async (req: Request, res: Response) => {
   try {
     const userRecord = await FirebaseAuthService.getUserFromRequest(req);
     // Ensure user exists in app DB
-    const user = await UserRepository.findOrCreateUser({ uid: (userRecord as any).uid, email: (userRecord as any).email, displayName: (userRecord as any).displayName });
+    const user = await UserRepository.findOrCreateUser({
+      uid: (userRecord as any).uid,
+      email: (userRecord as any).email,
+      displayName: (userRecord as any).displayName,
+    });
     res.json({ data: user });
   } catch (err: any) {
     res.status(401).json({ error: { message: err.message || 'Unauthorized' } });

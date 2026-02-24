@@ -8,15 +8,17 @@ import {
 } from 'firebase/auth';
 
 // Client-side Firebase initialization for Next.js
-const clientFirebaseConfig = typeof window !== 'undefined' && (globalThis as any).__FIREBASE_CONFIG ? (globalThis as any).__FIREBASE_CONFIG : undefined;
+const clientFirebaseConfig =
+  typeof window !== 'undefined' && (globalThis as any).__FIREBASE_CONFIG
+    ? (globalThis as any).__FIREBASE_CONFIG
+    : undefined;
 
-const firebaseConfig =
-  clientFirebaseConfig ?? {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  };
+const firebaseConfig = clientFirebaseConfig ?? {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+};
 
 let app: ReturnType<typeof initializeApp> | undefined;
 let auth: ReturnType<typeof getAuth> | undefined;

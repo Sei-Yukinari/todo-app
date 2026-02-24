@@ -22,8 +22,17 @@ const getPrisma = () => {
       // This keeps the API running for local testing of auth routes without a DB.
       prisma = {
         user: {
-          async findUnique(_q: any) { return null; },
-          async create(args: any) { return { id: 'local-1', uid: args.data.uid, email: args.data.email, displayName: args.data.displayName }; },
+          async findUnique(_q: any) {
+            return null;
+          },
+          async create(args: any) {
+            return {
+              id: 'local-1',
+              uid: args.data.uid,
+              email: args.data.email,
+              displayName: args.data.displayName,
+            };
+          },
         },
       } as any;
       return prisma;
@@ -31,7 +40,13 @@ const getPrisma = () => {
   }
 };
 
-export const findOrCreateUser = async (userData: { uid: string; email?: string; displayName?: string; provider?: string; providerUid?: string }) => {
+export const findOrCreateUser = async (userData: {
+  uid: string;
+  email?: string;
+  displayName?: string;
+  provider?: string;
+  providerUid?: string;
+}) => {
   const { uid, email, displayName, provider, providerUid } = userData;
   const db = getPrisma();
   try {

@@ -1,4 +1,9 @@
-import { RegisterController, LoginController, LogoutController, MeController } from './AuthControllers';
+import {
+  RegisterController,
+  LoginController,
+  LogoutController,
+  MeController,
+} from './AuthControllers';
 import * as FirebaseAuthService from '../../infrastructure/services/FirebaseAuthService';
 import * as UserRepository from '../../infrastructure/repositories/UserRepository';
 import { Request, Response } from 'express';
@@ -25,7 +30,10 @@ describe.skip('AuthControllers', () => {
   describe('RegisterController', () => {
     it('registers successfully', async () => {
       req.body = { email: 'test@example.com', password: 'pass' };
-      (FirebaseAuthService.register as vi.Mock).mockResolvedValue({ uid: '123', email: 'test@example.com' });
+      (FirebaseAuthService.register as vi.Mock).mockResolvedValue({
+        uid: '123',
+        email: 'test@example.com',
+      });
       await RegisterController(req as Request, res as Response);
       expect(statusMock).toHaveBeenCalledWith(200);
       expect(jsonMock).toHaveBeenCalledWith({ data: { uid: '123', email: 'test@example.com' } });
@@ -38,7 +46,9 @@ describe.skip('AuthControllers', () => {
     });
     it('handles registration error', async () => {
       req.body = { email: 'fail@example.com', password: 'pass' };
-      (FirebaseAuthService.register as vi.Mock).mockRejectedValue(new Error('Registration failed.'));
+      (FirebaseAuthService.register as vi.Mock).mockRejectedValue(
+        new Error('Registration failed.')
+      );
       await RegisterController.handle(req as Request, res as Response);
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({ error: 'Registration failed.' });
@@ -96,10 +106,15 @@ describe.skip('AuthControllers', () => {
       (FirebaseAuthService.getIdTokenFromRequest as vi.Mock).mockReturnValue('token123');
       (FirebaseAuthService.getIdTokenFromRequest as vi.Mock).mockReturnValue('token123');
       (FirebaseAuthService.verifyIdToken as vi.Mock).mockResolvedValue({ uid: '123' });
-      (FirebaseAuthService.getUser as vi.Mock).mockResolvedValue({ uid: '123', email: 'test@example.com' });
+      (FirebaseAuthService.getUser as vi.Mock).mockResolvedValue({
+        uid: '123',
+        email: 'test@example.com',
+      });
       await MeController(req as Request, res as Response);
       expect(statusMock).toHaveBeenCalledWith(200);
-      expect(jsonMock).toHaveBeenCalledWith({ data: { id: 1, uid: '123', email: 'test@example.com' } });
+      expect(jsonMock).toHaveBeenCalledWith({
+        data: { id: 1, uid: '123', email: 'test@example.com' },
+      });
     });
     it('returns 401 if no token', async () => {
       (FirebaseAuthService.getIdTokenFromRequest as vi.Mock).mockReturnValue(undefined);
