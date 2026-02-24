@@ -55,6 +55,8 @@ async function initFirebase(): Promise<void> {
       }
     }
 
+    console.log('firebaseConfig (post-fetch)', firebaseConfig);
+
     if (!getApps().length) {
       if (!firebaseConfig.apiKey) {
         throw new Error('Missing Firebase apiKey');
@@ -68,17 +70,6 @@ async function initFirebase(): Promise<void> {
   } finally {
     initializing = false;
   }
-}
-
-let app: ReturnType<typeof initializeApp> | undefined;
-let auth: ReturnType<typeof getAuth> | undefined;
-
-if (typeof window !== 'undefined') {
-  // debug: log client-side firebase config loaded from env
-  console.log('firebaseConfig', firebaseConfig);
-  console.log('NEXT_PUBLIC_FIREBASE_API_KEY', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
-  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-  auth = getAuth(app);
 }
 
 export const googleProvider = new GoogleAuthProvider();
