@@ -80,3 +80,5 @@
 PR note: Created via Copilot CLI.
 
 PR created via Copilot CLI at 2026-02-24T07:18:40Z
+
+README: PR用の丁寧な説明を追加
