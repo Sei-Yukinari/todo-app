@@ -10,7 +10,7 @@
 - **Prisma** を通じてPostgreSQLにアクセスする。生のSQLクエリは使用しない
 - **Zod** でAPIリクエスト・フォーム入力のバリデーションを行う
 - **TanStack Query** でサーバー状態を管理する（クライアント側でのfetch直書きは避ける）
-- **JWT** はHTTPOnly Cookieで管理する。LocalStorageには保存しない
+- 認証は Firebase Authentication を使用し、セッションは HTTPOnly セッションCookie（firebase-admin の createSessionCookie）で管理します。プロバイダは Google と GitHub のみを許可します。
 
 ---
 

@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { verifyAuth } from '@/lib/auth';
+// verifyAuth should validate Firebase session cookie (HTTPOnly) issued by firebase-admin createSessionCookie
 
 export async function GET(request: NextRequest) {
   // 1. 認証検証

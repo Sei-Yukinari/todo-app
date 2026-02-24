@@ -17,7 +17,7 @@ TODOアプリ。複数ユーザーが各自のタスクを管理するWebアプ�
 | フロントエンド | Next.js 16+ (App Router), TypeScript, Tailwind CSS |
 | 状態管理 | TanStack Query (React Query)                       |
 | バックエンド | Node.js + Express または Fastify                      |
-| 認証 | JWT (jsonwebtoken) + bcrypt, HTTPOnly Cookie       |
+| 認証 | Firebase Authentication (Google, GitHub) — セッション管理: HTTPOnly セッションCookie（firebase-admin createSessionCookie） |
 | ORM | Prisma                                             |
 | データベース | PostgreSQL                                         |
 | バリデーション | Zod                                                |
