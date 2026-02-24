@@ -11,6 +11,7 @@ const LoginPage = () => {
     try {
       const providerObj = provider === 'google' ? googleProvider : githubProvider;
       const { idToken } = await signInWithProvider(providerObj);
+      console.log('[LOGIN] idToken length=', idToken ? idToken.length : 0);
 
       const res = await fetch('/api/auth/session', {
         method: 'POST',
@@ -25,9 +26,10 @@ const LoginPage = () => {
 
       // redirect to home after successful session creation
       window.location.href = '/';
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Sign in failed');
+      const msg = err?.message || 'Sign in failed';
+      alert(msg);
     } finally {
       setLoading(false);
     }

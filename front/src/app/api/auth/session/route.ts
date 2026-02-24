@@ -18,8 +18,17 @@ export async function POST(request: NextRequest) {
     });
 
     if (!res.ok) {
-      const json = await res.json();
-      return NextResponse.json({ error: { message: json.error?.message || 'Failed to create session' } }, { status: res.status });
+      // Try to parse JSON safely; backend may return non-JSON or empty body
+      let json: any = {};
+      try {
+        json = await res.json();
+      } catch {
+        const text = await res.text().catch(() => null);
+        if (text) json = { error: { message: text } };
+      }
+      // Log backend error for debugging (do not log tokens)
+      console.error('[BFF] backend /api/auth/session error', res.status, json?.error?.message || json?.message || 'no-message');
+      return NextResponse.json({ error: { message: json?.error?.message || json?.message || 'Failed to create session' } }, { status: res.status });
     }
 
     // Propagate Set-Cookie header from backend
