@@ -14,9 +14,31 @@ router.post('/login', loginController);
 router.post('/session', async (req, res) => {
   try {
     const { idToken } = req.body;
-    if (!idToken) return res.status(400).json({ error: { message: 'Missing idToken' } });
+    // Log minimal info for debugging without exposing tokens
+    console.log('[POST /api/auth/session] received body keys=', Object.keys(req.body));
+    console.log('[POST /api/auth/session] idToken present=', !!idToken, 'length=', idToken ? idToken.length : 0);
+    if (idToken && typeof idToken === 'string') {
+      console.log('[POST /api/auth/session] idToken prefix=', idToken.slice(0, 10));
+    }
+    // quick debug: echo back a hint header when idToken is missing/invalid
+    if (!idToken) return res.status(400).set('X-Auth-Debug', 'missing-idToken').json({ error: { message: 'Missing idToken' } });
 
     const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days
+
+    // Development convenience: accept a special 'fake' idToken to create a local session without Firebase.
+    if (process.env.NODE_ENV !== 'production' && idToken === 'fake') {
+      console.log('[POST /api/auth/session] creating fake session for dev');
+      const fakeSession = 'dev-session-' + Date.now();
+      res.cookie('session', fakeSession, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        maxAge: expiresIn,
+        path: '/',
+      });
+      return res.json({ data: { message: 'Session created (dev stub)' } });
+    }
+
     const sessionCookie = await FirebaseAuthService.createSessionCookie(idToken, expiresIn);
 
     // Set cookie
@@ -30,8 +52,14 @@ router.post('/session', async (req, res) => {
 
     return res.json({ data: { message: 'Session created' } });
   } catch (err: any) {
-    console.error('[POST /api/auth/session]', err);
-    return res.status(500).json({ error: { message: err.message || 'Internal Server Error' } });
+    console.error('[POST /api/auth/session]', err && err.stack ? err.stack : err);
+    const msg = err?.message || '';
+    // Map common firebase-admin token errors to clearer statuses for the client
+    if (typeof msg === 'string' && (msg.includes('not a valid Firebase ID token') || msg.includes('Firebase ID token has expired'))) {
+      res.set('X-Auth-Debug', 'invalid-idToken');
+      return res.status(401).json({ error: { message: msg } });
+    }
+    return res.status(500).json({ error: { message: msg || 'Internal Server Error' } });
   }
 });
 

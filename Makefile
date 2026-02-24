@@ -12,8 +12,12 @@ logs:
 logs-api:
 	$(DC) logs -f api
 
-logs-front:
-	$(DC) logs -f front
+# ローカルで front を立ち上げる (ホスト上で npm run dev を実行)
+install-front:
+	cd front && npm ci
+
+dev-front:
+	cd front && npm run dev
 
 ps:
 	$(DC) ps
