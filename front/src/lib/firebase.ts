@@ -78,9 +78,13 @@ export const githubProvider = new GithubAuthProvider();
 export const signInWithProvider = async (
   provider: GoogleAuthProvider | GithubAuthProvider
 ): Promise<{ idToken: string }> => {
-  if (typeof window === 'undefined' || !auth) {
+  if (typeof window === 'undefined') {
     throw new Error('Firebase auth is only available in the browser');
   }
+
+  await initFirebase();
+
+  if (!auth) throw new Error('Firebase auth not initialized');
 
   try {
     const result = await signInWithPopup(auth, provider);
@@ -92,6 +96,8 @@ export const signInWithProvider = async (
 };
 
 export const signOutClient = async (): Promise<void> => {
-  if (typeof window === 'undefined' || !auth) return;
+  if (typeof window === 'undefined') return;
+  await initFirebase();
+  if (!auth) return;
   await signOut(auth);
 };
