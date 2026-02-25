@@ -38,9 +38,14 @@ export const verifyIdToken = async (idToken: string) => {
   }
 };
 
-export const createSessionCookie = async (idToken: string, expiresInMs = 5 * 24 * 60 * 60 * 1000) => {
+export const createSessionCookie = async (
+  idToken: string,
+  expiresInMs = 5 * 24 * 60 * 60 * 1000
+) => {
   try {
-    const sessionCookie = await admin.auth().createSessionCookie(idToken, { expiresIn: expiresInMs });
+    const sessionCookie = await admin
+      .auth()
+      .createSessionCookie(idToken, { expiresIn: expiresInMs });
     return sessionCookie;
   } catch (err) {
     throw err;
@@ -60,7 +65,10 @@ export const getIdTokenFromRequest = (req: Request): string | null => {
   // Look for session cookie named 'session'
   const cookie = req.headers['cookie'];
   if (!cookie) return null;
-  const match = String(cookie).split(';').map((c) => c.trim()).find((c) => c.startsWith('session='));
+  const match = String(cookie)
+    .split(';')
+    .map((c) => c.trim())
+    .find((c) => c.startsWith('session='));
   if (!match) return null;
   return match.split('=')[1] || null;
 };

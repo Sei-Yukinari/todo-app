@@ -1,5 +1,10 @@
 import express from 'express';
-import { registerController, loginController, logoutController, meController } from '../controllers/AuthControllers';
+import {
+  registerController,
+  loginController,
+  logoutController,
+  meController,
+} from '../controllers/AuthControllers';
 import * as FirebaseAuthService from '../../infrastructure/services/FirebaseAuthService';
 
 const router = express.Router();
@@ -16,12 +21,21 @@ router.post('/session', async (req, res) => {
     const { idToken } = req.body;
     // Log minimal info for debugging without exposing tokens
     console.log('[POST /api/auth/session] received body keys=', Object.keys(req.body));
-    console.log('[POST /api/auth/session] idToken present=', !!idToken, 'length=', idToken ? idToken.length : 0);
+    console.log(
+      '[POST /api/auth/session] idToken present=',
+      !!idToken,
+      'length=',
+      idToken ? idToken.length : 0
+    );
     if (idToken && typeof idToken === 'string') {
       console.log('[POST /api/auth/session] idToken prefix=', idToken.slice(0, 10));
     }
     // quick debug: echo back a hint header when idToken is missing/invalid
-    if (!idToken) return res.status(400).set('X-Auth-Debug', 'missing-idToken').json({ error: { message: 'Missing idToken' } });
+    if (!idToken)
+      return res
+        .status(400)
+        .set('X-Auth-Debug', 'missing-idToken')
+        .json({ error: { message: 'Missing idToken' } });
 
     const expiresIn = 5 * 24 * 60 * 60 * 1000; // 5 days
 
@@ -55,7 +69,11 @@ router.post('/session', async (req, res) => {
     console.error('[POST /api/auth/session]', err && err.stack ? err.stack : err);
     const msg = err?.message || '';
     // Map common firebase-admin token errors to clearer statuses for the client
-    if (typeof msg === 'string' && (msg.includes('not a valid Firebase ID token') || msg.includes('Firebase ID token has expired'))) {
+    if (
+      typeof msg === 'string' &&
+      (msg.includes('not a valid Firebase ID token') ||
+        msg.includes('Firebase ID token has expired'))
+    ) {
       res.set('X-Auth-Debug', 'invalid-idToken');
       return res.status(401).json({ error: { message: msg } });
     }
